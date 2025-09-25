@@ -75,44 +75,48 @@
 
 
 import express from "express";
-import { Configuration, OpenAIApi } from "openai";
+import dotenv from "dotenv";
+import OpenAI from "openai";
+
+dotenv.config();
 
 const app = express();
 app.use(express.json());
 
-// OpenAI configuration
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,  // Set this in Render as environment variable
+// Use environment variable for OpenAI API key
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
 });
-const openai = new OpenAIApi(configuration);
 
+// Root route (test)
 app.get("/", (req, res) => {
   res.send("AI Career Mentor Backend is running 🚀");
 });
 
+// Roadmap endpoint
 app.post("/roadmap", async (req, res) => {
   const { profile } = req.body;
 
-  const prompt = `Suggest 3 realistic, low-cost career pathways for a person with:
-Age: ${profile.age}
-Education: ${profile.education}
-Interests: ${profile.interests}
-Focus on small towns in India. Provide 2-3 practical steps for each pathway.`;
+  const prompt = `Suggest 3 realistic low-cost career pathways for:
+Age: ${profile.age}, Education: ${profile.education}, Interests: ${profile.interests}
+Focus on low-cost options available in small towns of India.`;
 
   try {
-    const response = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo", // Free-tier model
+    const completion = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
       messages: [{ role: "user", content: prompt }],
-      max_tokens: 400,
     });
 
-    const roadmap = response.data.choices[0].message.content;
+    const roadmap = completion.choices[0].message.content;
     res.json({ roadmap });
-  } catch (err) {
-    console.error(err);
-    res.json({ roadmap: "Sorry, could not generate roadmap at this time." });
+  } catch (error) {
+    console.error(error);
+    res.json({ roadmap: "Error generating roadmap. Try again later." });
   }
 });
 
+// Use Render assigned port or fallback to 3001
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log(`Backend running on ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Backend running on port ${PORT}`);
+});
