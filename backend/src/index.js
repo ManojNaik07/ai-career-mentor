@@ -74,19 +74,62 @@
 
 
 
+// import express from "express";
+// import dotenv from "dotenv";
+// import OpenAI from "openai";
+
+// dotenv.config();
+
+// const app = express();
+// app.use(express.json());
+
+// // Use environment variable for OpenAI API key
+// const openai = new OpenAI({
+//   apiKey: process.env.OPENAI_API_KEY,
+// });
+
+// // Root route (test)
+// app.get("/", (req, res) => {
+//   res.send("AI Career Mentor Backend is running 🚀");
+// });
+
+// // Roadmap endpoint
+// app.post("/roadmap", async (req, res) => {
+//   const { profile } = req.body;
+
+//   const prompt = `Suggest 3 realistic low-cost career pathways for:
+// Age: ${profile.age}, Education: ${profile.education}, Interests: ${profile.interests}
+// Focus on low-cost options available in small towns of India.`;
+
+//   try {
+//     const completion = await openai.chat.completions.create({
+//       model: "gpt-3.5-turbo",
+//       messages: [{ role: "user", content: prompt }],
+//     });
+
+//     const roadmap = completion.choices[0].message.content;
+//     res.json({ roadmap });
+//   } catch (error) {
+//     console.error(error);
+//     res.json({ roadmap: "Error generating roadmap. Try again later." });
+//   }
+// });
+
+// // Use Render assigned port or fallback to 3001
+// const PORT = process.env.PORT || 3001;
+// app.listen(PORT, () => {
+//   console.log(`Backend running on port ${PORT}`);
+// });
+
+
 import express from "express";
 import dotenv from "dotenv";
-import OpenAI from "openai";
+import fetch from "node-fetch"; // use node-fetch for Hugging Face API
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
-
-// Use environment variable for OpenAI API key
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
 
 // Root route (test)
 app.get("/", (req, res) => {
@@ -102,15 +145,28 @@ Age: ${profile.age}, Education: ${profile.education}, Interests: ${profile.inter
 Focus on low-cost options available in small towns of India.`;
 
   try {
-    const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: prompt }],
-    });
+    const response = await fetch(
+      "https://api-inference.huggingface.co/models/google/flan-t5-small", // free model
+      {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${process.env.HF_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ inputs: prompt }),
+      }
+    );
 
-    const roadmap = completion.choices[0].message.content;
-    res.json({ roadmap });
-  } catch (error) {
-    console.error(error);
+    const data = await response.json();
+
+    if (data.error) {
+      res.json({ roadmap: "Error generating roadmap. Try again later." });
+    } else {
+      // Hugging Face returns an array of generated text
+      res.json({ roadmap: data[0]?.generated_text || "Try again later" });
+    }
+  } catch (err) {
+    console.error(err);
     res.json({ roadmap: "Error generating roadmap. Try again later." });
   }
 });
