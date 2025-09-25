@@ -104,18 +104,105 @@
 
 
 
+// "use client";
+
+// import { useState } from "react";
+
+// export default function Home() {
+//   const [profile, setProfile] = useState({ age: "", education: "", interests: "" });
+//   const [roadmap, setRoadmap] = useState("");
+//   const [loading, setLoading] = useState(false);
+
+//   const handleSubmit = async () => {
+//     setLoading(true);
+//     setRoadmap("");
+
+//     try {
+//       const res = await fetch("/api/roadmap", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({ profile }),
+//       });
+
+//       const data = await res.json();
+//       setRoadmap(data.roadmap || "No roadmap generated");
+//     } catch (err) {
+//       console.error("Error calling backend:", err);
+//       setRoadmap("Error generating roadmap");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   return (
+//     <main className="p-8 max-w-lg mx-auto">
+//       <h1 className="text-2xl font-bold mb-4">AI Career Mentor</h1>
+
+//       <input
+//         placeholder="Age"
+//         className="border p-2 mb-2 w-full"
+//         onChange={(e) => setProfile({ ...profile, age: e.target.value })}
+//       />
+//       <input
+//         placeholder="Education"
+//         className="border p-2 mb-2 w-full"
+//         onChange={(e) => setProfile({ ...profile, education: e.target.value })}
+//       />
+//       <input
+//         placeholder="Interests"
+//         className="border p-2 mb-2 w-full"
+//         onChange={(e) => setProfile({ ...profile, interests: e.target.value })}
+//       />
+
+//       <button
+//         onClick={handleSubmit}
+//         className="px-4 py-2 bg-blue-600 text-white rounded"
+//         disabled={loading}
+//       >
+//         {loading ? "Generating..." : "Get Roadmap"}
+//       </button>
+
+//       {roadmap && <pre className="mt-4 p-2 bg-gray-100">{roadmap}</pre>}
+//     </main>
+//   );
+// }
+
+
+
+
+
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import ReactFlow, {
+  Background,
+  Controls,
+  MiniMap,
+  addEdge,
+  Connection,
+  Edge,
+  Node,
+} from "reactflow";
+import "reactflow/dist/style.css";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 export default function Home() {
-  const [profile, setProfile] = useState({ age: "", education: "", interests: "" });
+  const [profile, setProfile] = useState({
+    age: "",
+    education: "",
+    interests: "",
+  });
   const [roadmap, setRoadmap] = useState("");
   const [loading, setLoading] = useState(false);
+  const [nodes, setNodes] = useState<Node[]>([]);
+  const [edges, setEdges] = useState<Edge[]>([]);
 
   const handleSubmit = async () => {
     setLoading(true);
     setRoadmap("");
+    setNodes([]);
+    setEdges([]);
 
     try {
       const res = await fetch("/api/roadmap", {
@@ -125,7 +212,31 @@ export default function Home() {
       });
 
       const data = await res.json();
-      setRoadmap(data.roadmap || "No roadmap generated");
+      const text: string = data.roadmap || "No roadmap generated";
+      setRoadmap(text);
+
+      // Break text into lines
+      const lines = text.split("\n").filter((l) => l.trim() !== "");
+
+      const flowNodes: Node[] = lines.map((line, index) => ({
+        id: String(index + 1),
+        data: { label: line },
+        position: { x: 100, y: index * 120 },
+        style: {
+          border: "1px solid #333",
+          padding: 10,
+          borderRadius: 12,
+          background: "#f9fafb",
+        },
+      }));
+      setNodes(flowNodes);
+
+      const flowEdges: Edge[] = lines.slice(1).map((_, i) => ({
+        id: `e${i + 1}-${i + 2}`,
+        source: String(i + 1),
+        target: String(i + 2),
+      }));
+      setEdges(flowEdges);
     } catch (err) {
       console.error("Error calling backend:", err);
       setRoadmap("Error generating roadmap");
@@ -134,8 +245,26 @@ export default function Home() {
     }
   };
 
+  const onConnect = useCallback(
+    (params: Edge | Connection) =>
+      setEdges((eds) => addEdge(params, eds)),
+    []
+  );
+
+  const downloadPDF = async () => {
+    const flow = document.getElementById("roadmap-flow");
+    if (!flow) return;
+    const canvas = await html2canvas(flow);
+    const imgData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF("p", "mm", "a4");
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save("career-roadmap.pdf");
+  };
+
   return (
-    <main className="p-8 max-w-lg mx-auto">
+    <main className="p-8 max-w-3xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">AI Career Mentor</h1>
 
       <input
@@ -162,7 +291,31 @@ export default function Home() {
         {loading ? "Generating..." : "Get Roadmap"}
       </button>
 
-      {roadmap && <pre className="mt-4 p-2 bg-gray-100">{roadmap}</pre>}
+      {roadmap && (
+        <div className="mt-6">
+          <div
+            id="roadmap-flow"
+            className="h-[600px] border rounded-xl shadow-lg"
+          >
+            <ReactFlow
+              nodes={nodes}
+              edges={edges}
+              onConnect={onConnect}
+              fitView
+            >
+              <MiniMap />
+              <Controls />
+              <Background />
+            </ReactFlow>
+          </div>
+          <button
+            onClick={downloadPDF}
+            className="mt-4 px-6 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700"
+          >
+            Download as PDF
+          </button>
+        </div>
+      )}
     </main>
   );
 }
