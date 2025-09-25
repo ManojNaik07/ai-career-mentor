@@ -122,13 +122,23 @@
 // });
 
 
+
+
+
+
+
+
 import express from "express";
 import dotenv from "dotenv";
-import fetch from "node-fetch"; // use node-fetch for Hugging Face API
+import fetch from "node-fetch"; // Hugging Face API
+import cors from "cors";
 
 dotenv.config();
 
 const app = express();
+
+// Enable CORS for all origins (frontend will call backend)
+app.use(cors());
 app.use(express.json());
 
 // Root route (test)
@@ -140,13 +150,17 @@ app.get("/", (req, res) => {
 app.post("/roadmap", async (req, res) => {
   const { profile } = req.body;
 
+  if (!profile?.age || !profile?.education || !profile?.interests) {
+    return res.status(400).json({ error: "Profile with age, education, and interests is required" });
+  }
+
   const prompt = `Suggest 3 realistic low-cost career pathways for:
 Age: ${profile.age}, Education: ${profile.education}, Interests: ${profile.interests}
 Focus on low-cost options available in small towns of India.`;
 
   try {
     const response = await fetch(
-      "https://api-inference.huggingface.co/models/google/flan-t5-small", // free model
+      "https://api-inference.huggingface.co/models/google/flan-t5-small",
       {
         method: "POST",
         headers: {
@@ -160,14 +174,15 @@ Focus on low-cost options available in small towns of India.`;
     const data = await response.json();
 
     if (data.error) {
-      res.json({ roadmap: "Error generating roadmap. Try again later." });
-    } else {
-      // Hugging Face returns an array of generated text
-      res.json({ roadmap: data[0]?.generated_text || "Try again later" });
+      console.error("Hugging Face Error:", data.error);
+      return res.status(500).json({ roadmap: "Error generating roadmap. Try again later." });
     }
+
+    const roadmap = Array.isArray(data) ? data[0]?.generated_text : data.generated_text;
+    res.json({ roadmap: roadmap || "Try again later" });
   } catch (err) {
-    console.error(err);
-    res.json({ roadmap: "Error generating roadmap. Try again later." });
+    console.error("Server Error:", err);
+    res.status(500).json({ roadmap: "Error generating roadmap. Try again later." });
   }
 });
 

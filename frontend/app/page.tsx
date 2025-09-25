@@ -114,14 +114,27 @@ export default function Home() {
   const [roadmap, setRoadmap] = useState("");
 
   const handleSubmit = async () => {
-    const res = await fetch("/api/roadmap", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ profile }),
-    });
+    // Use backend URL from environment variable
+    const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-    const data = await res.json();
-    setRoadmap(data.roadmap || "No roadmap generated");
+    if (!BACKEND_URL) {
+      alert("Backend URL not set in environment variables!");
+      return;
+    }
+
+    try {
+      const res = await fetch(`${BACKEND_URL}/roadmap`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ profile }),
+      });
+
+      const data = await res.json();
+      setRoadmap(data.roadmap || "No roadmap generated");
+    } catch (err) {
+      console.error("Error calling backend:", err);
+      setRoadmap("Error generating roadmap");
+    }
   };
 
   return (
