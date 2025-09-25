@@ -221,12 +221,15 @@ export default function Home() {
       const flowNodes: Node[] = lines.map((line, index) => ({
         id: String(index + 1),
         data: { label: line },
-        position: { x: 100, y: index * 120 },
+        position: { x: 250, y: index * 150 },
         style: {
           border: "1px solid #333",
-          padding: 10,
-          borderRadius: 12,
+          padding: 12,
+          borderRadius: 10,
           background: "#f9fafb",
+          fontSize: "14px",
+          minWidth: 200,
+          textAlign: "center",
         },
       }));
       setNodes(flowNodes);
@@ -235,6 +238,8 @@ export default function Home() {
         id: `e${i + 1}-${i + 2}`,
         source: String(i + 1),
         target: String(i + 2),
+        animated: true,
+        style: { stroke: "#2563eb" }, // blue lines
       }));
       setEdges(flowEdges);
     } catch (err) {
@@ -264,7 +269,7 @@ export default function Home() {
   };
 
   return (
-    <main className="p-8 max-w-3xl mx-auto">
+    <main className="p-8 max-w-4xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">AI Career Mentor</h1>
 
       <input
@@ -293,9 +298,11 @@ export default function Home() {
 
       {roadmap && (
         <div className="mt-6">
+          {/* React Flow container must have width + height */}
           <div
             id="roadmap-flow"
-            className="h-[600px] border rounded-xl shadow-lg"
+            className="border rounded-xl shadow-lg"
+            style={{ width: "100%", height: "600px" }}
           >
             <ReactFlow
               nodes={nodes}
