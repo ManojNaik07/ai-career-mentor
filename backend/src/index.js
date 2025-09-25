@@ -141,8 +141,8 @@ app.use(express.json());
 
 // Configure Hugging Face Router via OpenAI SDK
 const client = new OpenAI({
-  baseURL: "https://router.huggingface.co/v1", // HF OpenAI-compatible endpoint
-  apiKey: process.env.HF_TOKEN, // Your HF token in Render env vars
+  baseURL: "https://router.huggingface.co/v1", // Hugging Face OpenAI-compatible endpoint
+  apiKey: process.env.HF_TOKEN,                // put your HF token in Render env vars
 });
 
 // Root route (test)
@@ -155,26 +155,30 @@ app.post("/roadmap", async (req, res) => {
   const { profile } = req.body;
 
   if (!profile?.age || !profile?.education || !profile?.interests) {
-    return res.status(400).json({
-      error: "Profile with age, education, and interests is required",
-    });
+    return res
+      .status(400)
+      .json({ error: "Profile with age, education, and interests is required" });
   }
 
   const prompt = `Suggest 3 realistic low-cost career pathways for:
 Age: ${profile.age}, Education: ${profile.education}, Interests: ${profile.interests}
-Focus on low-cost options available in small towns of India. Format as clear bullet points.`;
+Focus on low-cost options available in small towns of India.`;
 
   try {
     const completion = await client.chat.completions.create({
-      model: "mistralai/Mistral-7B-Instruct-v0.2", // no ":featherless-ai"
-      messages: [{ role: "user", content: prompt }],
-      temperature: 0.7,
+      model: "mistralai/Mistral-7B-Instruct-v0.2:featherless-ai",
+      messages: [
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
     });
 
     const roadmap = completion.choices?.[0]?.message?.content || "Try again later";
     res.json({ roadmap });
   } catch (err) {
-    console.error("Server Error:", err?.response?.data || err.message);
+    console.error("Server Error:", err);
     res.status(500).json({ roadmap: "Error generating roadmap. Try again later." });
   }
 });
