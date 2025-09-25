@@ -104,7 +104,6 @@
 
 
 
-
 "use client";
 
 import { useState } from "react";
@@ -112,18 +111,14 @@ import { useState } from "react";
 export default function Home() {
   const [profile, setProfile] = useState({ age: "", education: "", interests: "" });
   const [roadmap, setRoadmap] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
-    // Use backend URL from environment variable
-    const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
-
-    if (!BACKEND_URL) {
-      alert("Backend URL not set in environment variables!");
-      return;
-    }
+    setLoading(true);
+    setRoadmap("");
 
     try {
-      const res = await fetch(`${BACKEND_URL}/roadmap`, {
+      const res = await fetch("/api/roadmap", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ profile }),
@@ -134,6 +129,8 @@ export default function Home() {
     } catch (err) {
       console.error("Error calling backend:", err);
       setRoadmap("Error generating roadmap");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -157,8 +154,12 @@ export default function Home() {
         onChange={(e) => setProfile({ ...profile, interests: e.target.value })}
       />
 
-      <button onClick={handleSubmit} className="px-4 py-2 bg-blue-600 text-white rounded">
-        Get Roadmap
+      <button
+        onClick={handleSubmit}
+        className="px-4 py-2 bg-blue-600 text-white rounded"
+        disabled={loading}
+      >
+        {loading ? "Generating..." : "Get Roadmap"}
       </button>
 
       {roadmap && <pre className="mt-4 p-2 bg-gray-100">{roadmap}</pre>}

@@ -136,9 +136,7 @@ import cors from "cors";
 dotenv.config();
 
 const app = express();
-
-// Enable CORS for all origins (frontend will call backend)
-app.use(cors());
+app.use(cors()); // allow frontend to call API
 app.use(express.json());
 
 // Root route (test)
