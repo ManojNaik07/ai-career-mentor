@@ -170,7 +170,6 @@
 
 
 
-
 "use client";
 
 import { useState, useCallback } from "react";
@@ -186,13 +185,10 @@ import ReactFlow, {
 import "reactflow/dist/style.css";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import PPTXGenJS from "pptxgenjs";
 
 export default function Home() {
-  const [profile, setProfile] = useState({
-    age: "",
-    education: "",
-    interests: "",
-  });
+  const [profile, setProfile] = useState({ age: "", education: "", interests: "" });
   const [roadmap, setRoadmap] = useState("");
   const [loading, setLoading] = useState(false);
   const [nodes, setNodes] = useState<Node[]>([]);
@@ -215,32 +211,36 @@ export default function Home() {
       const text: string = data.roadmap || "No roadmap generated";
       setRoadmap(text);
 
-      // Break text into lines
       const lines = text.split("\n").filter((l) => l.trim() !== "");
 
+      const nodeSpacing = 100; // vertical spacing
+      const nodeWidth = 300;
+
       const flowNodes: Node[] = lines.map((line, index) => ({
-        id: String(index + 1),
+        id: `${index + 1}`,
         data: { label: line },
-        position: { x: 250, y: index * 150 },
+        position: { x: 50, y: index * nodeSpacing },
         style: {
+          width: nodeWidth,
+          minHeight: 60,
           border: "1px solid #333",
-          padding: 12,
-          borderRadius: 10,
+          borderRadius: 12,
           background: "#f9fafb",
-          fontSize: "14px",
-          minWidth: 200,
+          padding: 10,
           textAlign: "center",
+          whiteSpace: "normal",
         },
       }));
-      setNodes(flowNodes);
 
       const flowEdges: Edge[] = lines.slice(1).map((_, i) => ({
         id: `e${i + 1}-${i + 2}`,
-        source: String(i + 1),
-        target: String(i + 2),
+        source: `${i + 1}`,
+        target: `${i + 2}`,
         animated: true,
-        style: { stroke: "#2563eb" }, // blue lines
+        style: { stroke: "#888" },
       }));
+
+      setNodes(flowNodes);
       setEdges(flowEdges);
     } catch (err) {
       console.error("Error calling backend:", err);
@@ -251,8 +251,7 @@ export default function Home() {
   };
 
   const onConnect = useCallback(
-    (params: Edge | Connection) =>
-      setEdges((eds) => addEdge(params, eds)),
+    (params: Edge | Connection) => setEdges((eds) => addEdge(params, eds)),
     []
   );
 
@@ -268,25 +267,48 @@ export default function Home() {
     pdf.save("career-roadmap.pdf");
   };
 
+  const downloadPPT = () => {
+    if (!roadmap) return;
+    const pptx = new PPTXGenJS();
+    const lines = roadmap.split("\n").filter((l) => l.trim() !== "");
+
+    lines.forEach((line) => {
+      const slide = pptx.addSlide();
+      slide.addText(line, {
+        x: 0.5,
+        y: 1.5,
+        w: "90%",
+        fontSize: 24,
+        align: "center",
+        bold: true,
+        fontFace: "Arial",
+      });
+    });
+
+    pptx.writeFile({ fileName: "career-roadmap.pptx" });
+  };
+
   return (
-    <main className="p-8 max-w-4xl mx-auto">
+    <main className="p-8 max-w-5xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">AI Career Mentor</h1>
 
-      <input
-        placeholder="Age"
-        className="border p-2 mb-2 w-full"
-        onChange={(e) => setProfile({ ...profile, age: e.target.value })}
-      />
-      <input
-        placeholder="Education"
-        className="border p-2 mb-2 w-full"
-        onChange={(e) => setProfile({ ...profile, education: e.target.value })}
-      />
-      <input
-        placeholder="Interests"
-        className="border p-2 mb-2 w-full"
-        onChange={(e) => setProfile({ ...profile, interests: e.target.value })}
-      />
+      <div className="flex flex-col gap-2 mb-4">
+        <input
+          placeholder="Age"
+          className="border p-2 w-full"
+          onChange={(e) => setProfile({ ...profile, age: e.target.value })}
+        />
+        <input
+          placeholder="Education"
+          className="border p-2 w-full"
+          onChange={(e) => setProfile({ ...profile, education: e.target.value })}
+        />
+        <input
+          placeholder="Interests"
+          className="border p-2 w-full"
+          onChange={(e) => setProfile({ ...profile, interests: e.target.value })}
+        />
+      </div>
 
       <button
         onClick={handleSubmit}
@@ -298,11 +320,9 @@ export default function Home() {
 
       {roadmap && (
         <div className="mt-6">
-          {/* React Flow container must have width + height */}
           <div
             id="roadmap-flow"
-            className="border rounded-xl shadow-lg"
-            style={{ width: "100%", height: "600px" }}
+            className="h-[700px] w-full border rounded-xl shadow-lg"
           >
             <ReactFlow
               nodes={nodes}
@@ -315,12 +335,21 @@ export default function Home() {
               <Background />
             </ReactFlow>
           </div>
-          <button
-            onClick={downloadPDF}
-            className="mt-4 px-6 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700"
-          >
-            Download as PDF
-          </button>
+
+          <div className="flex gap-4 mt-4">
+            <button
+              onClick={downloadPDF}
+              className="px-6 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700"
+            >
+              Download as PDF
+            </button>
+            <button
+              onClick={downloadPPT}
+              className="px-6 py-2 bg-purple-600 text-white rounded-lg shadow hover:bg-purple-700"
+            >
+              Download as PPTX
+            </button>
+          </div>
         </div>
       )}
     </main>
