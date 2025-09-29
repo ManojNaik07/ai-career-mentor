@@ -288,10 +288,6 @@ export default function Home() {
     pptx.writeFile({ fileName: "career-roadmap.pptx" });
   };
 
-  function USERHASPER() {
-    return false;
-  }
-
   return (
     <main className="p-8 max-w-5xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">AI Career Mentor</h1>
@@ -313,15 +309,14 @@ export default function Home() {
           onChange={(e) => setProfile({ ...profile, interests: e.target.value })}
         />
       </div>
-      {USERHASPER() ? (
-        <button
-          onClick={handleSubmit}
-          className="px-4 py-2 bg-blue-600 text-white rounded"
-          disabled={loading}
-        >
-          {loading ? "Generating..." : "Get Roadmap"}
-        </button>
-      ) : null}
+      
+      <button
+        onClick={handleSubmit}
+        className="px-4 py-2 bg-blue-600 text-white rounded"
+        disabled={loading}
+      >
+        {loading ? "Generating..." : "Get Roadmap"}
+      </button>
 
       {roadmap && (
         <div className="mt-6">
