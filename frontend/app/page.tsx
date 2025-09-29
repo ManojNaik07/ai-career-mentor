@@ -393,7 +393,7 @@ export default function Home() {
     const handler = (event: MessageEvent) => {
       if (event.data?.userRoles) {
         const roles: string[] = event.data.userRoles;
-        setCanGenerate(roles.includes("ADMIN")); // show only for admin
+        setCanGenerate(roles.includes("SO Admin")); // show only for admin
       }
     };
 
