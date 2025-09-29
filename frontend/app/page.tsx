@@ -170,9 +170,202 @@
 
 
 
+// "use client";
+
+// import { useState, useCallback } from "react";
+// import ReactFlow, {
+//   Background,
+//   Controls,
+//   MiniMap,
+//   addEdge,
+//   Connection,
+//   Edge,
+//   Node,
+// } from "reactflow";
+// import "reactflow/dist/style.css";
+// import html2canvas from "html2canvas";
+// import jsPDF from "jspdf";
+// import PPTXGenJS from "pptxgenjs";
+
+// export default function Home() {
+//   const [profile, setProfile] = useState({ age: "", education: "", interests: "" });
+//   const [roadmap, setRoadmap] = useState("");
+//   const [loading, setLoading] = useState(false);
+//   const [nodes, setNodes] = useState<Node[]>([]);
+//   const [edges, setEdges] = useState<Edge[]>([]);
+
+//   const handleSubmit = async () => {
+//     setLoading(true);
+//     setRoadmap("");
+//     setNodes([]);
+//     setEdges([]);
+
+//     try {
+//       const res = await fetch("/api/roadmap", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({ profile }),
+//       });
+
+//       const data = await res.json();
+//       const text: string = data.roadmap || "No roadmap generated";
+//       setRoadmap(text);
+
+//       const lines = text.split("\n").filter((l) => l.trim() !== "");
+
+//       const nodeSpacing = 100; // vertical spacing
+//       const nodeWidth = 300;
+
+//       const flowNodes: Node[] = lines.map((line, index) => ({
+//         id: `${index + 1}`,
+//         data: { label: line },
+//         position: { x: 50, y: index * nodeSpacing },
+//         style: {
+//           width: nodeWidth,
+//           minHeight: 60,
+//           border: "1px solid #333",
+//           borderRadius: 12,
+//           background: "#f9fafb",
+//           padding: 10,
+//           textAlign: "center",
+//           whiteSpace: "normal",
+//         },
+//       }));
+
+//       const flowEdges: Edge[] = lines.slice(1).map((_, i) => ({
+//         id: `e${i + 1}-${i + 2}`,
+//         source: `${i + 1}`,
+//         target: `${i + 2}`,
+//         animated: true,
+//         style: { stroke: "#888" },
+//       }));
+
+//       setNodes(flowNodes);
+//       setEdges(flowEdges);
+//     } catch (err) {
+//       console.error("Error calling backend:", err);
+//       setRoadmap("Error generating roadmap");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const onConnect = useCallback(
+//     (params: Edge | Connection) => setEdges((eds) => addEdge(params, eds)),
+//     []
+//   );
+
+//   const downloadPDF = async () => {
+//     const flow = document.getElementById("roadmap-flow");
+//     if (!flow) return;
+//     const canvas = await html2canvas(flow);
+//     const imgData = canvas.toDataURL("image/png");
+//     const pdf = new jsPDF("p", "mm", "a4");
+//     const pdfWidth = pdf.internal.pageSize.getWidth();
+//     const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+//     pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+//     pdf.save("career-roadmap.pdf");
+//   };
+
+//   const downloadPPT = () => {
+//     if (!roadmap) return;
+//     const pptx = new PPTXGenJS();
+//     const lines = roadmap.split("\n").filter((l) => l.trim() !== "");
+
+//     lines.forEach((line) => {
+//       const slide = pptx.addSlide();
+//       slide.addText(line, {
+//         x: 0.5,
+//         y: 1.5,
+//         w: "90%",
+//         fontSize: 24,
+//         align: "center",
+//         bold: true,
+//         fontFace: "Arial",
+//       });
+//     });
+
+//     pptx.writeFile({ fileName: "career-roadmap.pptx" });
+//   };
+
+//   return (
+//     <main className="p-8 max-w-5xl mx-auto">
+//       <h1 className="text-2xl font-bold mb-4">AI Career Mentor</h1>
+
+//       <div className="flex flex-col gap-2 mb-4">
+//         <input
+//           placeholder="Age"
+//           className="border p-2 w-full"
+//           onChange={(e) => setProfile({ ...profile, age: e.target.value })}
+//         />
+//         <input
+//           placeholder="Education"
+//           className="border p-2 w-full"
+//           onChange={(e) => setProfile({ ...profile, education: e.target.value })}
+//         />
+//         <input
+//           placeholder="Interests"
+//           className="border p-2 w-full"
+//           onChange={(e) => setProfile({ ...profile, interests: e.target.value })}
+//         />
+//       </div>
+      
+//       <button
+//         onClick={handleSubmit}
+//         className="px-4 py-2 bg-blue-600 text-white rounded"
+//         disabled={loading}
+//       >
+//         {loading ? "Generating..." : "Get Roadmap"}
+//       </button>
+
+//       {roadmap && (
+//         <div className="mt-6">
+//           <div
+//             id="roadmap-flow"
+//             className="h-[700px] w-full border rounded-xl shadow-lg"
+//           >
+//             <ReactFlow
+//               nodes={nodes}
+//               edges={edges}
+//               onConnect={onConnect}
+//               fitView
+//             >
+//               <MiniMap />
+//               <Controls />
+//               <Background />
+//             </ReactFlow>
+//           </div>
+
+//           <div className="flex gap-4 mt-4">
+//             <button
+//               onClick={downloadPDF}
+//               className="px-6 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700"
+//             >
+//               Download as PDF
+//             </button>
+//             <button
+//               onClick={downloadPPT}
+//               className="px-6 py-2 bg-purple-600 text-white rounded-lg shadow hover:bg-purple-700"
+//             >
+//               Download as PPTX
+//             </button>
+//           </div>
+//         </div>
+//       )}
+//     </main>
+//   );
+// }
+
+
+
+
+
+//new
+
+
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import ReactFlow, {
   Background,
   Controls,
@@ -193,7 +386,22 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [nodes, setNodes] = useState<Node[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
+  const [canGenerate, setCanGenerate] = useState(false); // role-based button
 
+  // Role-based logic
+  useEffect(() => {
+    const handler = (event: MessageEvent) => {
+      if (event.data?.userRoles) {
+        const roles: string[] = event.data.userRoles;
+        setCanGenerate(roles.includes("ADMIN")); // show only for admin
+      }
+    };
+
+    window.addEventListener("message", handler);
+    return () => window.removeEventListener("message", handler);
+  }, []);
+
+  // Generate roadmap
   const handleSubmit = async () => {
     setLoading(true);
     setRoadmap("");
@@ -212,8 +420,7 @@ export default function Home() {
       setRoadmap(text);
 
       const lines = text.split("\n").filter((l) => l.trim() !== "");
-
-      const nodeSpacing = 100; // vertical spacing
+      const nodeSpacing = 100;
       const nodeWidth = 300;
 
       const flowNodes: Node[] = lines.map((line, index) => ({
@@ -309,14 +516,17 @@ export default function Home() {
           onChange={(e) => setProfile({ ...profile, interests: e.target.value })}
         />
       </div>
-      
-      <button
-        onClick={handleSubmit}
-        className="px-4 py-2 bg-blue-600 text-white rounded"
-        disabled={loading}
-      >
-        {loading ? "Generating..." : "Get Roadmap"}
-      </button>
+
+      {/* Role-based Generate button */}
+      {canGenerate && (
+        <button
+          onClick={handleSubmit}
+          className="px-4 py-2 bg-blue-600 text-white rounded"
+          disabled={loading}
+        >
+          {loading ? "Generating..." : "Get Roadmap"}
+        </button>
+      )}
 
       {roadmap && (
         <div className="mt-6">
@@ -324,12 +534,7 @@ export default function Home() {
             id="roadmap-flow"
             className="h-[700px] w-full border rounded-xl shadow-lg"
           >
-            <ReactFlow
-              nodes={nodes}
-              edges={edges}
-              onConnect={onConnect}
-              fitView
-            >
+            <ReactFlow nodes={nodes} edges={edges} onConnect={onConnect} fitView>
               <MiniMap />
               <Controls />
               <Background />
