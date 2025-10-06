@@ -389,17 +389,44 @@ export default function Home() {
   const [canGenerate, setCanGenerate] = useState(false); // role-based button
 
   // Role-based logic
-  useEffect(() => {
-    const handler = (event: MessageEvent) => {
-      if (event.data?.userRoles) {
-        const roles: string[] = event.data.userRoles;
-        setCanGenerate(roles.includes("amanojnaik980@gmail.com")); // show only for admin
-      }
-    };
+  // useEffect(() => {
+  //   const handler = (event: MessageEvent) => {
+  //     if (event.data?.userRoles) {
+  //       const roles: string[] = event.data.userRoles;
+  //       setCanGenerate(roles.includes("amanojnaik980@gmail.com")); // show only for admin
+  //     }
+  //   };
 
-    window.addEventListener("message", handler);
-    return () => window.removeEventListener("message", handler);
-  }, []);
+  //   window.addEventListener("message", handler);
+  //   return () => window.removeEventListener("message", handler);
+  // }, []);
+
+  // Role-based logic
+useEffect(() => {
+  const handler = (event: MessageEvent) => {
+    // Validate message source (optional, for security)
+    if (!event.origin.includes("applicationstudio.cloud.sap")) return;
+
+    // Receive message from SAP Fiori
+    if (event.data?.type === "USER_INFO") {
+      const user = event.data.payload;
+      console.log("Received user info from Fiori:", user);
+
+      // Example logic:
+      // Only admin (manoj.naik@peolsolutions.com) can generate roadmap
+      // You can change this as per your roles.
+      if (user.email === "amanojnaik980@gmail.com" || user.role === "ADMIN") {
+        setCanGenerate(true);
+      } else {
+        setCanGenerate(false);
+      }
+    }
+  };
+
+  window.addEventListener("message", handler);
+  return () => window.removeEventListener("message", handler);
+}, []);
+
 
   // Generate roadmap
   const handleSubmit = async () => {
