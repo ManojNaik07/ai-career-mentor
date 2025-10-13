@@ -402,20 +402,44 @@ export default function Home() {
   // }, []);
 
   // Role-based logic
+// useEffect(() => {
+//   const handler = (event: MessageEvent) => {
+//     // Validate message source (optional, for security)
+//     if (!event.origin.includes("applicationstudio.cloud.sap")) return;
+
+//     // Receive message from SAP Fiori
+//     if (event.data?.type === "USER_INFO") {
+//       const user = event.data.payload;
+//       console.log("Received user info from Fiori:", user);
+
+//       // Example logic:
+//       // Only admin (manoj.naik@peolsolutions.com) can generate roadmap
+//       // You can change this as per your roles.
+//       if (user.email === "amanojnaik980@gmail.com" || user.role === "ADMIN") {
+//         setCanGenerate(true);
+//       } else {
+//         setCanGenerate(false);
+//       }
+//     }
+//   };
+
+//   window.addEventListener("message", handler);
+//   return () => window.removeEventListener("message", handler);
+// }, []);
 useEffect(() => {
   const handler = (event: MessageEvent) => {
     // Validate message source (optional, for security)
-    if (!event.origin.includes("applicationstudio.cloud.sap")) return;
+    // Replace this with your Fiori app domain if needed
+    // if (!event.origin.includes("applicationstudio.cloud.sap")) return;
 
     // Receive message from SAP Fiori
-    if (event.data?.type === "USER_INFO") {
-      const user = event.data.payload;
-      console.log("Received user info from Fiori:", user);
+    if (event.data?.type === "USER_ROLES") {
+      const roleCollections: string[] = event.data.payload;
+      console.log("Received roleCollections from Fiori:", roleCollections);
 
       // Example logic:
-      // Only admin (manoj.naik@peolsolutions.com) can generate roadmap
-      // You can change this as per your roles.
-      if (user.email === "amanojnaik980@gmail.com" || user.role === "ADMIN") {
+      // Enable features only for SO Admin or SO Manager
+      if (roleCollections.includes("SO Admin") || roleCollections.includes("SO Manager")) {
         setCanGenerate(true);
       } else {
         setCanGenerate(false);
