@@ -18,13 +18,17 @@ export default function Home() {
   const [profile, setProfile] = useState({ age: "", education: "", interests: "" });
   const [roadmapData, setRoadmapData] = useState<RoadmapData | null>(null);
   const [loading, setLoading] = useState(false);
-  const [canGenerate, setCanGenerate] = useState(true); // Default to true for better UX during dev
+  const [canGenerate, setCanGenerate] = useState(false); // Default to false, wait for role check
 
-  // Role-based logic (Optional: Overwrite if message received)
+  // Role-based logic
   useEffect(() => {
     const handler = (event: MessageEvent) => {
+      console.log("Received message from parent:", event.data); // Debug log
+
       if (event.data?.type === "USER_ROLES") {
         const roleCollections: string[] = event.data.payload;
+        console.log("User Roles:", roleCollections);
+
         if (roleCollections.includes("SO Admin") || roleCollections.includes("SO Manager")) {
           setCanGenerate(true);
         } else {
