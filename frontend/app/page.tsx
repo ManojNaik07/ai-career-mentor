@@ -1,613 +1,274 @@
-// import Image from "next/image";
-
-// export default function Home() {
-//   return (
-//     <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-//       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-//         <Image
-//           className="dark:invert"
-//           src="/next.svg"
-//           alt="Next.js logo"
-//           width={180}
-//           height={38}
-//           priority
-//         />
-//         <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-//           <li className="mb-2 tracking-[-.01em]">
-//             Get started by editing{" "}
-//             <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-//               app/page.tsx
-//             </code>
-//             .
-//           </li>
-//           <li className="tracking-[-.01em]">
-//             Save and see your changes instantly.
-//           </li>
-//         </ol>
-
-//         <div className="flex gap-4 items-center flex-col sm:flex-row">
-//           <a
-//             className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-//             href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-//             target="_blank"
-//             rel="noopener noreferrer"
-//           >
-//             <Image
-//               className="dark:invert"
-//               src="/vercel.svg"
-//               alt="Vercel logomark"
-//               width={20}
-//               height={20}
-//             />
-//             Deploy now
-//           </a>
-//           <a
-//             className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-//             href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-//             target="_blank"
-//             rel="noopener noreferrer"
-//           >
-//             Read our docs
-//           </a>
-//         </div>
-//       </main>
-//       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-//         <a
-//           className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-//           href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           <Image
-//             aria-hidden
-//             src="/file.svg"
-//             alt="File icon"
-//             width={16}
-//             height={16}
-//           />
-//           Learn
-//         </a>
-//         <a
-//           className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-//           href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           <Image
-//             aria-hidden
-//             src="/window.svg"
-//             alt="Window icon"
-//             width={16}
-//             height={16}
-//           />
-//           Examples
-//         </a>
-//         <a
-//           className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-//           href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           <Image
-//             aria-hidden
-//             src="/globe.svg"
-//             alt="Globe icon"
-//             width={16}
-//             height={16}
-//           />
-//           Go to nextjs.org →
-//         </a>
-//       </footer>
-//     </div>
-//   );
-// }
-
-
-
-// "use client";
-
-// import { useState } from "react";
-
-// export default function Home() {
-//   const [profile, setProfile] = useState({ age: "", education: "", interests: "" });
-//   const [roadmap, setRoadmap] = useState("");
-//   const [loading, setLoading] = useState(false);
-
-//   const handleSubmit = async () => {
-//     setLoading(true);
-//     setRoadmap("");
-
-//     try {
-//       const res = await fetch("/api/roadmap", {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({ profile }),
-//       });
-
-//       const data = await res.json();
-//       setRoadmap(data.roadmap || "No roadmap generated");
-//     } catch (err) {
-//       console.error("Error calling backend:", err);
-//       setRoadmap("Error generating roadmap");
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   return (
-//     <main className="p-8 max-w-lg mx-auto">
-//       <h1 className="text-2xl font-bold mb-4">AI Career Mentor</h1>
-
-//       <input
-//         placeholder="Age"
-//         className="border p-2 mb-2 w-full"
-//         onChange={(e) => setProfile({ ...profile, age: e.target.value })}
-//       />
-//       <input
-//         placeholder="Education"
-//         className="border p-2 mb-2 w-full"
-//         onChange={(e) => setProfile({ ...profile, education: e.target.value })}
-//       />
-//       <input
-//         placeholder="Interests"
-//         className="border p-2 mb-2 w-full"
-//         onChange={(e) => setProfile({ ...profile, interests: e.target.value })}
-//       />
-
-//       <button
-//         onClick={handleSubmit}
-//         className="px-4 py-2 bg-blue-600 text-white rounded"
-//         disabled={loading}
-//       >
-//         {loading ? "Generating..." : "Get Roadmap"}
-//       </button>
-
-//       {roadmap && <pre className="mt-4 p-2 bg-gray-100">{roadmap}</pre>}
-//     </main>
-//   );
-// }
-
-
-
-
-// "use client";
-
-// import { useState, useCallback } from "react";
-// import ReactFlow, {
-//   Background,
-//   Controls,
-//   MiniMap,
-//   addEdge,
-//   Connection,
-//   Edge,
-//   Node,
-// } from "reactflow";
-// import "reactflow/dist/style.css";
-// import html2canvas from "html2canvas";
-// import jsPDF from "jspdf";
-// import PPTXGenJS from "pptxgenjs";
-
-// export default function Home() {
-//   const [profile, setProfile] = useState({ age: "", education: "", interests: "" });
-//   const [roadmap, setRoadmap] = useState("");
-//   const [loading, setLoading] = useState(false);
-//   const [nodes, setNodes] = useState<Node[]>([]);
-//   const [edges, setEdges] = useState<Edge[]>([]);
-
-//   const handleSubmit = async () => {
-//     setLoading(true);
-//     setRoadmap("");
-//     setNodes([]);
-//     setEdges([]);
-
-//     try {
-//       const res = await fetch("/api/roadmap", {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({ profile }),
-//       });
-
-//       const data = await res.json();
-//       const text: string = data.roadmap || "No roadmap generated";
-//       setRoadmap(text);
-
-//       const lines = text.split("\n").filter((l) => l.trim() !== "");
-
-//       const nodeSpacing = 100; // vertical spacing
-//       const nodeWidth = 300;
-
-//       const flowNodes: Node[] = lines.map((line, index) => ({
-//         id: `${index + 1}`,
-//         data: { label: line },
-//         position: { x: 50, y: index * nodeSpacing },
-//         style: {
-//           width: nodeWidth,
-//           minHeight: 60,
-//           border: "1px solid #333",
-//           borderRadius: 12,
-//           background: "#f9fafb",
-//           padding: 10,
-//           textAlign: "center",
-//           whiteSpace: "normal",
-//         },
-//       }));
-
-//       const flowEdges: Edge[] = lines.slice(1).map((_, i) => ({
-//         id: `e${i + 1}-${i + 2}`,
-//         source: `${i + 1}`,
-//         target: `${i + 2}`,
-//         animated: true,
-//         style: { stroke: "#888" },
-//       }));
-
-//       setNodes(flowNodes);
-//       setEdges(flowEdges);
-//     } catch (err) {
-//       console.error("Error calling backend:", err);
-//       setRoadmap("Error generating roadmap");
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   const onConnect = useCallback(
-//     (params: Edge | Connection) => setEdges((eds) => addEdge(params, eds)),
-//     []
-//   );
-
-//   const downloadPDF = async () => {
-//     const flow = document.getElementById("roadmap-flow");
-//     if (!flow) return;
-//     const canvas = await html2canvas(flow);
-//     const imgData = canvas.toDataURL("image/png");
-//     const pdf = new jsPDF("p", "mm", "a4");
-//     const pdfWidth = pdf.internal.pageSize.getWidth();
-//     const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-//     pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-//     pdf.save("career-roadmap.pdf");
-//   };
-
-//   const downloadPPT = () => {
-//     if (!roadmap) return;
-//     const pptx = new PPTXGenJS();
-//     const lines = roadmap.split("\n").filter((l) => l.trim() !== "");
-
-//     lines.forEach((line) => {
-//       const slide = pptx.addSlide();
-//       slide.addText(line, {
-//         x: 0.5,
-//         y: 1.5,
-//         w: "90%",
-//         fontSize: 24,
-//         align: "center",
-//         bold: true,
-//         fontFace: "Arial",
-//       });
-//     });
-
-//     pptx.writeFile({ fileName: "career-roadmap.pptx" });
-//   };
-
-//   return (
-//     <main className="p-8 max-w-5xl mx-auto">
-//       <h1 className="text-2xl font-bold mb-4">AI Career Mentor</h1>
-
-//       <div className="flex flex-col gap-2 mb-4">
-//         <input
-//           placeholder="Age"
-//           className="border p-2 w-full"
-//           onChange={(e) => setProfile({ ...profile, age: e.target.value })}
-//         />
-//         <input
-//           placeholder="Education"
-//           className="border p-2 w-full"
-//           onChange={(e) => setProfile({ ...profile, education: e.target.value })}
-//         />
-//         <input
-//           placeholder="Interests"
-//           className="border p-2 w-full"
-//           onChange={(e) => setProfile({ ...profile, interests: e.target.value })}
-//         />
-//       </div>
-      
-//       <button
-//         onClick={handleSubmit}
-//         className="px-4 py-2 bg-blue-600 text-white rounded"
-//         disabled={loading}
-//       >
-//         {loading ? "Generating..." : "Get Roadmap"}
-//       </button>
-
-//       {roadmap && (
-//         <div className="mt-6">
-//           <div
-//             id="roadmap-flow"
-//             className="h-[700px] w-full border rounded-xl shadow-lg"
-//           >
-//             <ReactFlow
-//               nodes={nodes}
-//               edges={edges}
-//               onConnect={onConnect}
-//               fitView
-//             >
-//               <MiniMap />
-//               <Controls />
-//               <Background />
-//             </ReactFlow>
-//           </div>
-
-//           <div className="flex gap-4 mt-4">
-//             <button
-//               onClick={downloadPDF}
-//               className="px-6 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700"
-//             >
-//               Download as PDF
-//             </button>
-//             <button
-//               onClick={downloadPPT}
-//               className="px-6 py-2 bg-purple-600 text-white rounded-lg shadow hover:bg-purple-700"
-//             >
-//               Download as PPTX
-//             </button>
-//           </div>
-//         </div>
-//       )}
-//     </main>
-//   );
-// }
-
-
-
-
-
-//new
-
-
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import ReactFlow, {
-  Background,
-  Controls,
-  MiniMap,
-  addEdge,
-  Connection,
-  Edge,
-  Node,
-} from "reactflow";
-import "reactflow/dist/style.css";
-import html2canvas from "html2canvas";
+import { useState, useEffect } from "react";
 import jsPDF from "jspdf";
 import PPTXGenJS from "pptxgenjs";
 
+interface Pathway {
+  title: string;
+  description: string;
+  steps: string[];
+}
+
+interface RoadmapData {
+  pathways: Pathway[];
+}
+
 export default function Home() {
   const [profile, setProfile] = useState({ age: "", education: "", interests: "" });
-  const [roadmap, setRoadmap] = useState("");
+  const [roadmapData, setRoadmapData] = useState<RoadmapData | null>(null);
   const [loading, setLoading] = useState(false);
-  const [nodes, setNodes] = useState<Node[]>([]);
-  const [edges, setEdges] = useState<Edge[]>([]);
-  const [canGenerate, setCanGenerate] = useState(false); // role-based button
+  const [canGenerate, setCanGenerate] = useState(true); // Default to true for better UX during dev
 
-  // Role-based logic
-  // useEffect(() => {
-  //   const handler = (event: MessageEvent) => {
-  //     if (event.data?.userRoles) {
-  //       const roles: string[] = event.data.userRoles;
-  //       setCanGenerate(roles.includes("amanojnaik980@gmail.com")); // show only for admin
-  //     }
-  //   };
-
-  //   window.addEventListener("message", handler);
-  //   return () => window.removeEventListener("message", handler);
-  // }, []);
-
-  // Role-based logic
-// useEffect(() => {
-//   const handler = (event: MessageEvent) => {
-//     // Validate message source (optional, for security)
-//     if (!event.origin.includes("applicationstudio.cloud.sap")) return;
-
-//     // Receive message from SAP Fiori
-//     if (event.data?.type === "USER_INFO") {
-//       const user = event.data.payload;
-//       console.log("Received user info from Fiori:", user);
-
-//       // Example logic:
-//       // Only admin (manoj.naik@peolsolutions.com) can generate roadmap
-//       // You can change this as per your roles.
-//       if (user.email === "amanojnaik980@gmail.com" || user.role === "ADMIN") {
-//         setCanGenerate(true);
-//       } else {
-//         setCanGenerate(false);
-//       }
-//     }
-//   };
-
-//   window.addEventListener("message", handler);
-//   return () => window.removeEventListener("message", handler);
-// }, []);
-useEffect(() => {
-  const handler = (event: MessageEvent) => {
-    // Validate message source (optional, for security)
-    // Replace this with your Fiori app domain if needed
-    // if (!event.origin.includes("applicationstudio.cloud.sap")) return;
-
-    // Receive message from SAP Fiori
-    if (event.data?.type === "USER_ROLES") {
-      const roleCollections: string[] = event.data.payload;
-      console.log("Received roleCollections from Fiori:", roleCollections);
-
-      // Example logic:
-      // Enable features only for SO Admin or SO Manager
-      if (roleCollections.includes("SO Admin") || roleCollections.includes("SO Manager")) {
-        setCanGenerate(true);
-      } else {
-        setCanGenerate(false);
+  // Role-based logic (Optional: Overwrite if message received)
+  useEffect(() => {
+    const handler = (event: MessageEvent) => {
+      if (event.data?.type === "USER_ROLES") {
+        const roleCollections: string[] = event.data.payload;
+        if (roleCollections.includes("SO Admin") || roleCollections.includes("SO Manager")) {
+          setCanGenerate(true);
+        } else {
+          setCanGenerate(false);
+        }
       }
-    }
-  };
+    };
 
-  window.addEventListener("message", handler);
-  return () => window.removeEventListener("message", handler);
-}, []);
+    window.addEventListener("message", handler);
+    return () => window.removeEventListener("message", handler);
+  }, []);
 
-
-  // Generate roadmap
   const handleSubmit = async () => {
+    if (!profile.age || !profile.education || !profile.interests) {
+      alert("Please fill in all fields");
+      return;
+    }
+
     setLoading(true);
-    setRoadmap("");
-    setNodes([]);
-    setEdges([]);
+    setRoadmapData(null);
 
     try {
-      const res = await fetch("/api/roadmap", {
+      const res = await fetch("http://localhost:3001/roadmap", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ profile }),
       });
 
       const data = await res.json();
-      const text: string = data.roadmap || "No roadmap generated";
-      setRoadmap(text);
 
-      const lines = text.split("\n").filter((l) => l.trim() !== "");
-      const nodeSpacing = 100;
-      const nodeWidth = 300;
+      // Parse the JSON string from the LLM
+      let parsedData: RoadmapData;
+      try {
+        parsedData = JSON.parse(data.roadmap);
+      } catch (e) {
+        console.error("Failed to parse JSON:", e);
+        // Fallback if LLM returns plain text
+        parsedData = {
+          pathways: [
+            {
+              title: "Generated Roadmap",
+              description: "Here is your career path based on the input.",
+              steps: data.roadmap.split("\n").filter((l: string) => l.trim() !== "")
+            }
+          ]
+        };
+      }
 
-      const flowNodes: Node[] = lines.map((line, index) => ({
-        id: `${index + 1}`,
-        data: { label: line },
-        position: { x: 50, y: index * nodeSpacing },
-        style: {
-          width: nodeWidth,
-          minHeight: 60,
-          border: "1px solid #333",
-          borderRadius: 12,
-          background: "#f9fafb",
-          padding: 10,
-          textAlign: "center",
-          whiteSpace: "normal",
-        },
-      }));
-
-      const flowEdges: Edge[] = lines.slice(1).map((_, i) => ({
-        id: `e${i + 1}-${i + 2}`,
-        source: `${i + 1}`,
-        target: `${i + 2}`,
-        animated: true,
-        style: { stroke: "#888" },
-      }));
-
-      setNodes(flowNodes);
-      setEdges(flowEdges);
+      setRoadmapData(parsedData);
     } catch (err) {
       console.error("Error calling backend:", err);
-      setRoadmap("Error generating roadmap");
+      alert("Failed to generate roadmap. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
-  const onConnect = useCallback(
-    (params: Edge | Connection) => setEdges((eds) => addEdge(params, eds)),
-    []
-  );
+  const downloadPDF = () => {
+    if (!roadmapData) return;
+    const doc = new jsPDF();
 
-  const downloadPDF = async () => {
-    const flow = document.getElementById("roadmap-flow");
-    if (!flow) return;
-    const canvas = await html2canvas(flow);
-    const imgData = canvas.toDataURL("image/png");
-    const pdf = new jsPDF("p", "mm", "a4");
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save("career-roadmap.pdf");
+    doc.setFontSize(20);
+    doc.text("AI Career Mentor - Roadmap", 20, 20);
+
+    doc.setFontSize(12);
+    doc.text(`Profile: Age ${profile.age}, ${profile.education}, ${profile.interests}`, 20, 30);
+
+    let y = 50;
+    roadmapData.pathways.forEach((pathway, index) => {
+      if (y > 250) {
+        doc.addPage();
+        y = 20;
+      }
+
+      doc.setFontSize(16);
+      doc.setTextColor(0, 102, 204);
+      doc.text(`${index + 1}. ${pathway.title}`, 20, y);
+      y += 10;
+
+      doc.setFontSize(12);
+      doc.setTextColor(0, 0, 0);
+      doc.text(pathway.description, 20, y, { maxWidth: 170 });
+      y += 15;
+
+      pathway.steps.forEach((step) => {
+        if (y > 270) {
+          doc.addPage();
+          y = 20;
+        }
+        doc.text(`• ${step}`, 30, y);
+        y += 8;
+      });
+
+      y += 15;
+    });
+
+    doc.save("career-roadmap.pdf");
   };
 
   const downloadPPT = () => {
-    if (!roadmap) return;
+    if (!roadmapData) return;
     const pptx = new PPTXGenJS();
-    const lines = roadmap.split("\n").filter((l) => l.trim() !== "");
 
-    lines.forEach((line) => {
-      const slide = pptx.addSlide();
-      slide.addText(line, {
-        x: 0.5,
-        y: 1.5,
-        w: "90%",
-        fontSize: 24,
-        align: "center",
-        bold: true,
-        fontFace: "Arial",
-      });
+    // Title Slide
+    const slide = pptx.addSlide();
+    slide.addText("AI Career Mentor", { x: 1, y: 1, fontSize: 24, bold: true, color: "363636" });
+    slide.addText(`Roadmap for: ${profile.education}, ${profile.interests}`, { x: 1, y: 2, fontSize: 18, color: "666666" });
+
+    // Pathway Slides
+    roadmapData.pathways.forEach((pathway) => {
+      const pSlide = pptx.addSlide();
+      pSlide.addText(pathway.title, { x: 0.5, y: 0.5, fontSize: 22, bold: true, color: "0066CC" });
+      pSlide.addText(pathway.description, { x: 0.5, y: 1.2, fontSize: 14, color: "333333" });
+
+      const stepsText = pathway.steps.map(s => `• ${s}`).join("\n");
+      pSlide.addText(stepsText, { x: 0.5, y: 2, w: "90%", h: "60%", fontSize: 14, color: "000000", lineSpacing: 28 });
     });
 
     pptx.writeFile({ fileName: "career-roadmap.pptx" });
   };
 
   return (
-    <main className="p-8 max-w-5xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">AI Career Mentor</h1>
+    <main className="min-h-screen flex flex-col items-center justify-center p-6 sm:p-12 relative overflow-hidden">
+      {/* Background Blobs */}
+      <div className="absolute top-0 left-0 w-96 h-96 bg-purple-500/30 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-500/30 rounded-full blur-3xl translate-x-1/2 translate-y-1/2 pointer-events-none"></div>
 
-      <div className="flex flex-col gap-2 mb-4">
-        <input
-          placeholder="Age"
-          className="border p-2 w-full"
-          onChange={(e) => setProfile({ ...profile, age: e.target.value })}
-        />
-        <input
-          placeholder="Education"
-          className="border p-2 w-full"
-          onChange={(e) => setProfile({ ...profile, education: e.target.value })}
-        />
-        <input
-          placeholder="Interests"
-          className="border p-2 w-full"
-          onChange={(e) => setProfile({ ...profile, interests: e.target.value })}
-        />
-      </div>
+      <div className="z-10 w-full max-w-6xl flex flex-col items-center gap-10">
 
-      {/* Role-based Generate button */}
-      {canGenerate && (
-        <button
-          onClick={handleSubmit}
-          className="px-4 py-2 bg-blue-600 text-white rounded"
-          disabled={loading}
-        >
-          {loading ? "Generating..." : "Get Roadmap"}
-        </button>
-      )}
-
-      {roadmap && (
-        <div className="mt-6">
-          <div
-            id="roadmap-flow"
-            className="h-[700px] w-full border rounded-xl shadow-lg"
-          >
-            <ReactFlow nodes={nodes} edges={edges} onConnect={onConnect} fitView>
-              <MiniMap />
-              <Controls />
-              <Background />
-            </ReactFlow>
-          </div>
-
-          <div className="flex gap-4 mt-4">
-            <button
-              onClick={downloadPDF}
-              className="px-6 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700"
-            >
-              Download as PDF
-            </button>
-            <button
-              onClick={downloadPPT}
-              className="px-6 py-2 bg-purple-600 text-white rounded-lg shadow hover:bg-purple-700"
-            >
-              Download as PPTX
-            </button>
-          </div>
+        {/* Header */}
+        <div className="text-center space-y-4">
+          <h1 className="text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
+            AI Career Mentor
+          </h1>
+          <p className="text-gray-300 text-lg max-w-2xl">
+            Discover your potential career paths with personalized AI guidance based on your education and interests.
+          </p>
         </div>
-      )}
+
+        {/* Input Form */}
+        <div className="w-full max-w-lg bg-white/10 backdrop-blur-lg border border-white/20 p-8 rounded-2xl shadow-xl flex flex-col gap-6">
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-300">Age</label>
+            <input
+              type="number"
+              placeholder="e.g. 22"
+              className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              value={profile.age}
+              onChange={(e) => setProfile({ ...profile, age: e.target.value })}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-300">Education</label>
+            <input
+              type="text"
+              placeholder="e.g. B.Tech in Computer Science"
+              className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              value={profile.education}
+              onChange={(e) => setProfile({ ...profile, education: e.target.value })}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-300">Interests</label>
+            <input
+              type="text"
+              placeholder="e.g. Coding, Design, AI"
+              className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              value={profile.interests}
+              onChange={(e) => setProfile({ ...profile, interests: e.target.value })}
+            />
+          </div>
+
+          {/* Generate Button - Only visible if authorized */}
+          {/* For demo purposes, if you want to bypass auth, remove the condition */}
+          <button
+            onClick={handleSubmit}
+            disabled={loading || !canGenerate}
+            className={`w-full py-4 rounded-xl font-bold text-lg shadow-lg transition-all transform hover:scale-[1.02] active:scale-[0.98] ${canGenerate
+              ? "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white cursor-pointer"
+              : "bg-gray-700 text-gray-400 cursor-not-allowed"
+              }`}
+          >
+            {loading ? (
+              <span className="flex items-center justify-center gap-2">
+                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Generating...
+              </span>
+            ) : !canGenerate ? (
+              "Unauthorized Access"
+            ) : (
+              "Generate Roadmap"
+            )}
+          </button>
+        </div>
+
+        {/* Results Section */}
+        {roadmapData && (
+          <div className="w-full animate-in fade-in slide-in-from-bottom-10 duration-700">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-3xl font-bold text-white">Your Career Pathways</h2>
+              <div className="flex gap-4">
+                <button
+                  onClick={downloadPDF}
+                  className="px-6 py-2 bg-red-500/80 hover:bg-red-500 text-white rounded-lg font-medium transition-colors flex items-center gap-2 backdrop-blur-sm"
+                >
+                  Download PDF
+                </button>
+                <button
+                  onClick={downloadPPT}
+                  className="px-6 py-2 bg-orange-500/80 hover:bg-orange-500 text-white rounded-lg font-medium transition-colors flex items-center gap-2 backdrop-blur-sm"
+                >
+                  Download PPT
+                </button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {roadmapData.pathways.map((pathway, idx) => (
+                <div key={idx} className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-colors group">
+                  <div className="h-12 w-12 rounded-full bg-blue-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <span className="text-xl font-bold text-blue-400">{idx + 1}</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-2">{pathway.title}</h3>
+                  <p className="text-gray-400 text-sm mb-4">{pathway.description}</p>
+
+                  <div className="space-y-3">
+                    {pathway.steps.map((step, sIdx) => (
+                      <div key={sIdx} className="flex items-start gap-3">
+                        <div className="min-w-[6px] h-[6px] rounded-full bg-blue-400 mt-2"></div>
+                        <p className="text-gray-300 text-sm">{step}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </main>
   );
 }
