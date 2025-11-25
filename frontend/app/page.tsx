@@ -58,7 +58,15 @@ export default function Home() {
       // Parse the JSON string from the LLM
       let parsedData: RoadmapData;
       try {
-        parsedData = JSON.parse(data.roadmap);
+        let cleanJson = data.roadmap.trim();
+        // Remove markdown code blocks if present
+        if (cleanJson.startsWith("```json")) {
+          cleanJson = cleanJson.replace(/^```json\s*/, "").replace(/\s*```$/, "");
+        } else if (cleanJson.startsWith("```")) {
+          cleanJson = cleanJson.replace(/^```\s*/, "").replace(/\s*```$/, "");
+        }
+
+        parsedData = JSON.parse(cleanJson);
       } catch (e) {
         console.error("Failed to parse JSON:", e);
         // Fallback if LLM returns plain text
