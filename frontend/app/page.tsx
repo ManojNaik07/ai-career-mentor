@@ -58,6 +58,7 @@ export default function Home() {
       });
 
       const data = await res.json();
+      console.log("Raw response from backend:", data); // Debug log
 
       // Parse the JSON string from the LLM
       let parsedData: RoadmapData;
@@ -72,13 +73,14 @@ export default function Home() {
 
         parsedData = JSON.parse(cleanJson);
       } catch (e) {
-        console.error("Failed to parse JSON:", e);
+        console.error("Failed to parse JSON. Raw text:", data.roadmap);
+        console.error("Parse error:", e);
         // Fallback if LLM returns plain text
         parsedData = {
           pathways: [
             {
-              title: "Generated Roadmap",
-              description: "Here is your career path based on the input.",
+              title: "Generated Roadmap (Text Format)",
+              description: "The AI returned a text response instead of structured data.",
               steps: data.roadmap.split("\n").filter((l: string) => l.trim() !== "")
             }
           ]
@@ -86,9 +88,9 @@ export default function Home() {
       }
 
       setRoadmapData(parsedData);
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error calling backend:", err);
-      alert("Failed to generate roadmap. Please try again.");
+      alert(`Failed to generate roadmap: ${err.message || err}`);
     } finally {
       setLoading(false);
     }

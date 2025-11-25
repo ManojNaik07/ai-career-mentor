@@ -22,10 +22,11 @@ app.get("/", (req, res) => {
 
 // List of models to try in order of preference
 const MODELS = [
-  "google/gemma-7b-it",                   // Google's open model
-  "meta-llama/Meta-Llama-3-8B-Instruct",  // Llama 3
-  "mistralai/Mistral-7B-Instruct-v0.2",   // Reliable fallback
-  "HuggingFaceH4/zephyr-7b-beta"          // Good alternative
+  "meta-llama/Meta-Llama-3-8B-Instruct",  // Fast and good
+  "mistralai/Mixtral-8x7B-Instruct-v0.1", // High quality
+  "mistralai/Mistral-7B-Instruct-v0.3",   // Reliable
+  "google/gemma-7b-it",                   // Google
+  "microsoft/Phi-3-mini-4k-instruct"      // Fallback
 ];
 
 // Roadmap endpoint
@@ -55,7 +56,7 @@ Focus on low-cost options available in small towns of India.`;
             content: prompt + "\n\nIMPORTANT: Return the response ONLY in valid JSON format with the following structure:\n{\n  \"pathways\": [\n    {\n      \"title\": \"Career Option Title\",\n      \"description\": \"Brief description\",\n      \"steps\": [\"Step 1\", \"Step 2\", \"Step 3\"]\n    }\n  ]\n}",
           },
         ],
-        max_tokens: 1024,
+        max_tokens: 2048,
         temperature: 0.7,
         // response_format: { type: "json_object" } // Removed strict mode to avoid compatibility issues with some models
       });
