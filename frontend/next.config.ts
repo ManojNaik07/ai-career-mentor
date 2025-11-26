@@ -5,11 +5,10 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "https://ai-career-mentor-behg.onrender.com/:path*", // backend Render URL
+        destination: "http://localhost:3001/:path*", // Proxy to local backend
       },
     ];
   },
 };
 
 export default nextConfig;
-

@@ -18,9 +18,10 @@ export default function Home() {
   const [profile, setProfile] = useState({ age: "", education: "", interests: "" });
   const [roadmapData, setRoadmapData] = useState<RoadmapData | null>(null);
   const [loading, setLoading] = useState(false);
-  const [canGenerate, setCanGenerate] = useState(false); // Default to false, wait for role check
+  const [canGenerate, setCanGenerate] = useState(true); // Default to true for testing
 
-  // Role-based logic
+  // Role-based logic (Commented out for testing)
+  /*
   useEffect(() => {
     const handler = (event: MessageEvent) => {
       console.log("Received message from parent:", event.data); // Debug log
@@ -40,6 +41,7 @@ export default function Home() {
     window.addEventListener("message", handler);
     return () => window.removeEventListener("message", handler);
   }, []);
+  */
 
   const handleSubmit = async () => {
     if (!profile.age || !profile.education || !profile.interests) {
@@ -51,7 +53,7 @@ export default function Home() {
     setRoadmapData(null);
 
     try {
-      const res = await fetch("http://localhost:3001/roadmap", {
+      const res = await fetch("/api/roadmap", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ profile }),
