@@ -45,7 +45,7 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<"roadmap" | "resume">("roadmap");
 
   return (
-    <main className="min-h-screen flex flex-col items-center p-6 sm:p-12 relative overflow-hidden bg-gray-900 text-white">
+    <main className="min-h-screen flex flex-col items-center p-4 sm:p-12 relative overflow-hidden bg-gray-900 text-white">
       {/* Background Blobs */}
       <div className="absolute top-0 left-0 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
@@ -58,9 +58,9 @@ export default function Home() {
             AI Career Mentor
           </h1>
 
-          <div className="flex justify-center gap-4">
-            <button onClick={() => setActiveTab("roadmap")} className={`px-6 py-2 rounded-full font-medium transition-all ${activeTab === "roadmap" ? "bg-blue-600 text-white shadow-lg" : "bg-white/10 text-gray-400 hover:bg-white/20"}`}>Career Roadmap</button>
-            <button onClick={() => setActiveTab("resume")} className={`px-6 py-2 rounded-full font-medium transition-all ${activeTab === "resume" ? "bg-purple-600 text-white shadow-lg" : "bg-white/10 text-gray-400 hover:bg-white/20"}`}>Resume Builder</button>
+          <div className="flex flex-wrap justify-center gap-4 w-full">
+            <button onClick={() => setActiveTab("roadmap")} className={`flex-1 sm:flex-none px-4 sm:px-6 py-2 rounded-full font-medium transition-all whitespace-nowrap ${activeTab === "roadmap" ? "bg-blue-600 text-white shadow-lg" : "bg-white/10 text-gray-400 hover:bg-white/20"}`}>Career Roadmap</button>
+            <button onClick={() => setActiveTab("resume")} className={`flex-1 sm:flex-none px-4 sm:px-6 py-2 rounded-full font-medium transition-all whitespace-nowrap ${activeTab === "resume" ? "bg-purple-600 text-white shadow-lg" : "bg-white/10 text-gray-400 hover:bg-white/20"}`}>Resume Builder</button>
           </div>
         </div>
 
@@ -175,7 +175,7 @@ function RoadmapGenerator() {
 
   return (
     <div className="flex flex-col items-center gap-10 w-full">
-      <div className="w-full max-w-lg bg-white/10 backdrop-blur-lg border border-white/20 p-8 rounded-2xl shadow-xl flex flex-col gap-6">
+      <div className="w-full max-w-lg bg-white/10 backdrop-blur-lg border border-white/20 p-6 sm:p-8 rounded-2xl shadow-xl flex flex-col gap-6">
         <div className="space-y-2">
           <label className="text-sm font-medium text-gray-300">Age</label>
           <input type="number" placeholder="e.g. 22" className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" value={profile.age} onChange={(e) => setProfile({ ...profile, age: e.target.value })} />
@@ -208,8 +208,8 @@ function RoadmapGenerator() {
 
       {roadmapData && (
         <div className="w-full animate-in fade-in slide-in-from-bottom-10 duration-700">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-3xl font-bold text-white">Your Career Pathways</h2>
+          <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white text-center sm:text-left">Your Career Pathways</h2>
             <div className="flex gap-4">
               <button onClick={downloadPDF} className="px-6 py-2 bg-red-500/80 hover:bg-red-500 text-white rounded-lg font-medium transition-colors flex items-center gap-2 backdrop-blur-sm">Download PDF</button>
               <button onClick={downloadPPT} className="px-6 py-2 bg-orange-500/80 hover:bg-orange-500 text-white rounded-lg font-medium transition-colors flex items-center gap-2 backdrop-blur-sm">Download PPT</button>
@@ -295,15 +295,15 @@ function ResumeBuilder() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
       {/* Editor */}
-      <div className="space-y-6 bg-white/5 p-6 rounded-2xl border border-white/10 h-[800px] overflow-y-auto custom-scrollbar print:hidden">
+      <div className="space-y-6 bg-white/5 p-4 sm:p-6 rounded-2xl border border-white/10 h-auto sm:h-[800px] overflow-y-auto custom-scrollbar print:hidden">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold">Resume Details</h2>
+          <h2 className="text-xl sm:text-2xl font-bold">Resume Details</h2>
           <button onClick={saveResume} className="px-4 py-2 bg-blue-600 rounded text-sm font-bold hover:bg-blue-500">Save Progress</button>
         </div>
 
-        <div className="flex gap-4 mb-4">
+        <div className="flex gap-4 mb-4 overflow-x-auto pb-2">
           {[1, 2, 3].map(t => (
-            <button key={t} onClick={() => setTemplate(t as any)} className={`flex-1 py-2 rounded border ${template === t ? "bg-blue-500 border-blue-500" : "border-white/10"}`}>Template {t}</button>
+            <button key={t} onClick={() => setTemplate(t as any)} className={`flex-1 min-w-[100px] py-2 rounded border ${template === t ? "bg-blue-500 border-blue-500" : "border-white/10"}`}>Template {t}</button>
           ))}
         </div>
 
@@ -316,7 +316,7 @@ function ResumeBuilder() {
             <input type="file" accept="image/*" onChange={handleImageUpload} className="text-sm text-gray-400" />
           </div>
           <input placeholder="Full Name" className="w-full bg-black/20 border border-white/10 rounded p-2" value={data.fullName} onChange={e => setData({ ...data, fullName: e.target.value })} />
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <input placeholder="Email" className="w-full bg-black/20 border border-white/10 rounded p-2" value={data.email} onChange={e => setData({ ...data, email: e.target.value })} />
             <input placeholder="Phone" className="w-full bg-black/20 border border-white/10 rounded p-2" value={data.phone} onChange={e => setData({ ...data, phone: e.target.value })} />
           </div>
@@ -368,13 +368,15 @@ function ResumeBuilder() {
       {/* Preview */}
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center print:hidden">
-          <h2 className="text-2xl font-bold">Preview</h2>
+          <h2 className="text-xl sm:text-2xl font-bold">Preview</h2>
           <button onClick={() => window.print()} className="px-6 py-2 bg-green-600 hover:bg-green-500 rounded font-bold shadow-lg">Download PDF (A4)</button>
         </div>
-        <div id="resume-preview" className="bg-white text-black shadow-2xl min-h-[1123px] w-full">
-          {template === 1 && <ModernTemplate data={data} />}
-          {template === 2 && <ClassicTemplate data={data} />}
-          {template === 3 && <MinimalTemplate data={data} />}
+        <div className="overflow-x-auto w-full border border-white/20 rounded-lg">
+          <div id="resume-preview" className="bg-white text-black shadow-2xl min-h-[1123px] w-full sm:w-[210mm] sm:min-w-[210mm] mx-auto origin-top-left sm:origin-top sm:scale-100">
+            {template === 1 && <ModernTemplate data={data} />}
+            {template === 2 && <ClassicTemplate data={data} />}
+            {template === 3 && <MinimalTemplate data={data} />}
+          </div>
         </div>
       </div>
     </div>
@@ -391,8 +393,8 @@ function ModernTemplate({ data }: { data: ResumeData }) {
   const formatList = (str: string) => str.split(',').filter(s => s.trim()).join(' • ');
 
   return (
-    <div className="flex h-full min-h-[1123px]">
-      <div className="w-1/3 bg-slate-800 text-white p-8">
+    <div className="flex flex-col sm:flex-row h-full min-h-[1123px]">
+      <div className="w-full sm:w-1/3 bg-slate-800 text-white p-8">
         <div className="text-center mb-8">
           {data.profilePic && <img src={data.profilePic} className="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-slate-600 object-cover" />}
           <h1 className="text-2xl font-bold mb-2">{data.fullName}</h1>
@@ -404,7 +406,7 @@ function ModernTemplate({ data }: { data: ResumeData }) {
         {data.languages && <div className="mb-6"><h4 className="font-bold border-b border-slate-600 mb-2">LANGUAGES</h4><p className="text-sm text-slate-300">{formatList(data.languages)}</p></div>}
         {data.hobbies && <div className="mb-6"><h4 className="font-bold border-b border-slate-600 mb-2">HOBBIES</h4><p className="text-sm text-slate-300">{formatList(data.hobbies)}</p></div>}
       </div>
-      <div className="w-2/3 p-8">
+      <div className="w-full sm:w-2/3 p-8">
         {data.summary && <Section title="Profile"><p className="text-sm leading-relaxed">{data.summary}</p></Section>}
         {data.experience.length > 0 && <Section title="Experience">{data.experience.map((e, i) => <div key={i} className="mb-3"><h4 className="font-bold">{e.role}</h4><p className="text-sm text-gray-600">{e.company} | {e.duration}</p></div>)}</Section>}
         {data.education.length > 0 && <Section title="Education">{data.education.map((e, i) => <div key={i} className="mb-3"><h4 className="font-bold">{e.degree}</h4><p className="text-sm text-gray-600">{e.institution} | {e.year}</p></div>)}</Section>}
@@ -426,8 +428,8 @@ function ClassicTemplate({ data }: { data: ResumeData }) {
         <p className="text-sm">{[data.email, data.phone, data.address].filter(Boolean).join(" • ")}</p>
       </div>
       {data.summary && <Section title="Professional Summary"><p className="text-sm text-justify">{data.summary}</p></Section>}
-      {data.experience.length > 0 && <Section title="Experience">{data.experience.map((e, i) => <div key={i} className="mb-4 flex justify-between"><div className="w-3/4"><h4 className="font-bold">{e.role}</h4><p className="italic">{e.company}</p></div><div className="w-1/4 text-right text-sm">{e.duration}</div></div>)}</Section>}
-      {data.education.length > 0 && <Section title="Education">{data.education.map((e, i) => <div key={i} className="mb-4 flex justify-between"><div className="w-3/4"><h4 className="font-bold">{e.degree}</h4><p className="italic">{e.institution}</p></div><div className="w-1/4 text-right text-sm">{e.year}</div></div>)}</Section>}
+      {data.experience.length > 0 && <Section title="Experience">{data.experience.map((e, i) => <div key={i} className="mb-4 flex flex-col sm:flex-row justify-between"><div className="w-full sm:w-3/4"><h4 className="font-bold">{e.role}</h4><p className="italic">{e.company}</p></div><div className="w-full sm:w-1/4 text-left sm:text-right text-sm">{e.duration}</div></div>)}</Section>}
+      {data.education.length > 0 && <Section title="Education">{data.education.map((e, i) => <div key={i} className="mb-4 flex flex-col sm:flex-row justify-between"><div className="w-full sm:w-3/4"><h4 className="font-bold">{e.degree}</h4><p className="italic">{e.institution}</p></div><div className="w-full sm:w-1/4 text-left sm:text-right text-sm">{e.year}</div></div>)}</Section>}
       {data.skills && <Section title="Skills"><p className="text-sm">{formatList(data.skills)}</p></Section>}
       {(data.achievements || data.publications) && <Section title="Additional Info"><p className="text-sm">{[data.achievements, data.publications].filter(Boolean).join(" • ")}</p></Section>}
       {data.customSections.map(s => s.content && <Section key={s.id} title={s.title}><p className="text-sm whitespace-pre-wrap">{s.content}</p></Section>)}
@@ -438,16 +440,16 @@ function ClassicTemplate({ data }: { data: ResumeData }) {
 function MinimalTemplate({ data }: { data: ResumeData }) {
   return (
     <div className="p-10 h-full min-h-[1123px] font-sans text-slate-800">
-      <div className="flex items-center gap-6 mb-8">
+      <div className="flex flex-col sm:flex-row items-center gap-6 mb-8">
         {data.profilePic && <img src={data.profilePic} className="w-24 h-24 rounded-lg object-cover" />}
-        <div>
+        <div className="text-center sm:text-left">
           <h1 className="text-4xl font-light text-blue-600">{data.fullName}</h1>
           <p className="text-gray-500 mt-1">{data.email} | {data.phone}</p>
           <p className="text-gray-500 text-sm">{data.address}</p>
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-8">
-        <div className="col-span-2">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+        <div className="col-span-1 sm:col-span-2">
           {data.summary && <div className="mb-6"><h3 className="text-blue-600 font-bold mb-2">ABOUT ME</h3><p className="text-sm text-gray-600">{data.summary}</p></div>}
           {data.experience.length > 0 && <div className="mb-6"><h3 className="text-blue-600 font-bold mb-2">EXPERIENCE</h3>{data.experience.map((e, i) => <div key={i} className="mb-4"><h4 className="font-bold">{e.role}</h4><p className="text-sm text-gray-500">{e.company} • {e.duration}</p></div>)}</div>}
           {data.education.length > 0 && <div className="mb-6"><h3 className="text-blue-600 font-bold mb-2">EDUCATION</h3>{data.education.map((e, i) => <div key={i} className="mb-4"><h4 className="font-bold">{e.degree}</h4><p className="text-sm text-gray-500">{e.institution} • {e.year}</p></div>)}</div>}
